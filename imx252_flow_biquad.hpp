@@ -1,9 +1,7 @@
 #pragma once
 #include <array>
 #include <cmath>
-// Causal biquad bandpass, unity response at center frequency.
-// For equivalent difference-input displacement at ~236fps.
-// Signal center is image-measured, not verified physical M1600 frequency.
+// Biquad bandpass for optical-flow displacement at ~236 fps.
 struct BiquadMotion {
  double b0=0,b1=0,b2=0,a1=0,a2=0,x1=0,x2=0,y1=0,y2=0;
  void configure(double fs=235.98,double fc=10.45,double q=2.2) {

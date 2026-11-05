@@ -18,6 +18,6 @@ int main(){
  printf("V2_BANDPASS center_10.45Hz=%.3f pass_18Hz=%.3f reject_3Hz=%.3f reject_50Hz=%.3f reject_100Hz=%.3f\n",
    center,middle,low,high,lighting);
  bool pass=center>.90 && center<1.08 && low<.28 && high<.13 && lighting<.04;
- printf("V2_FILTER_%s: finite causal filtered displacement, no hardware/network activity\n",pass?"PASS":"FAIL");
+ printf("V2_FILTER_%s: bandpass response\n",pass?"PASS":"FAIL");
  return pass?0:2;
 }

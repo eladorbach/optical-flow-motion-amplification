@@ -1,6 +1,4 @@
-// Optical flow motion amplification for a high-speed monochrome camera.
-// Tracks two regions relative to a reference patch and filters motion near 10.45 Hz.
-// Renders a portrait X11 preview. Gain is not a calibrated displacement ratio.
+// Optical flow motion amplification, Sony IMX252.
 // Copyright (c) 2026 Elad Orbach.
 #include "imx252_flow_biquad.hpp"
 #include <X11/Xlib.h>

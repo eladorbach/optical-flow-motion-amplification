@@ -1,22 +1,21 @@
 # Optical Flow Motion Amplification
 
-Real-time motion amplification from a high-speed monochrome camera using optical flow, a causal bandpass filter, and local image warping. Developed with a Sony IMX252-based camera and Jetson AGX Xavier.
+Real-time motion amplification using a high-speed monochrome camera and optical flow. Developed on the Jetson AGX Xavier with a Sony IMX252 camera.
 
-**Demonstration:** https://youtu.be/WWkTftrcGMY
+[![Motion amplification demonstration](https://img.youtube.com/vi/WWkTftrcGMY/hqdefault.jpg)](https://youtu.be/WWkTftrcGMY)
 
 ## How it works
 
-The application captures 1024 x 768 grayscale frames through Linux V4L2 and estimates optical flow in two selected image regions relative to a stationary reference patch. A causal biquad bandpass filter isolates displacement near 10.45 Hz. The filtered motion is used to warp the selected regions with smooth Gaussian falloff. The original image is shown outside those regions.
+The program captures 1024 × 768 grayscale frames through V4L2 and tracks motion in two selected regions relative to a reference patch. A biquad bandpass filter isolates movement around 10.45 Hz. The filtered displacement drives localized image warping, leaving the rest of the image unchanged.
 
-Capture and analysis run independently of the X11 viewer. The preview rotates the image into a 768 x 1024 portrait window, showing fresh frames at up to 60 fps.
+The original setup captured approximately 236 fps and displayed a portrait preview at approximately 59 fps.
 
 ## Requirements
 
-* Linux with a compatible V4L2 camera supporting 1024 x 768 GREY at more than 200 fps
-* X11 display (MIT-SHM preferred)
-* C++17 compiler, pthreads, Xlib and Xext
+- Linux and a V4L2 camera supporting 1024 × 768 GREY at 200+ fps
+- C++17, X11, Xext and pthreads
 
-On Ubuntu, install the development packages `build-essential`, `libx11-dev`, and `libxext-dev`.
+On Ubuntu: `build-essential`, `libx11-dev`, `libxext-dev`.
 
 ## Build and run
 
@@ -26,30 +25,26 @@ make test
 ./imx252_algo3_flow_v2 15
 ```
 
-The application opens `/dev/video0`, negotiates a GREY stream close to 238 fps and uses the current X11 display. The argument is the nominal amplification gain (0 to 80, default 15). Check camera mode support before running. The running application adjusts the stream settings and attempts to restore the previous ones on normal shutdown.
+Uses `/dev/video0` and the current X11 display. The argument sets amplification gain (0–80; default 15). The capture mode targets approximately 238 fps.
 
 ## Controls
 
 | Input | Action |
 | --- | --- |
-| Left click | Select first tracking region |
-| Right click | Select second tracking region |
-| Space | Switch between original and amplified views |
-| + and - | Adjust gain |
+| Left click | Select first region |
+| Right click | Select second region |
+| Space | Toggle amplified/original view |
+| + / - | Adjust gain |
 | R | Reset tracking |
-| Q or Escape | Quit |
+| Q / Esc | Quit |
 
-## Files
+## Source files
 
-* `imx252_algo3_flow_v2.cpp` - capture, tracking, warping and viewer
-* `imx252_flow_biquad.hpp` - causal displacement filter
-* `imx252_flow_biquad_test.cpp` - synthetic filter response test
-* `Makefile` - build and test targets
-
-## Measurement limits
-
-The original setup sustained approximately 236 fps capture and 59 fps display. These figures are software observations, not measured optical glass-to-glass latency. The 10.45 Hz target comes from measured image motion and is not an independently confirmed excitation frequency. The displayed amplification gain is nominal rather than physically calibrated. Adapt the camera mode, tracking regions and filter to other experiments.
+- `imx252_algo3_flow_v2.cpp` — capture, optical flow, image warping and preview
+- `imx252_flow_biquad.hpp` — bandpass filter
+- `imx252_flow_biquad_test.cpp` — filter response test
+- `Makefile` — build and test targets
 
 ## License
 
-MIT. Copyright (c) 2026 Elad Orbach.
+MIT — © 2026 Elad Orbach.
